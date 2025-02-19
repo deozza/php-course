@@ -2,6 +2,10 @@
 
 ## Sommaire <!-- omit in toc -->
 
+- [Origine](#origine)
+- [Particularités](#particularités)
+- [Installation](#installation)
+- [Premiers pas](#premiers-pas)
 - [La syntaxe de base](#la-syntaxe-de-base)
 - [Les variables](#les-variables)
 - [Les opérations mathématiques](#les-opérations-mathématiques)
@@ -12,10 +16,34 @@
 - [Les fonctions de base et utiles de PHP](#les-fonctions-de-base-et-utiles-de-php)
 - [Les fonctions](#les-fonctions)
 - [Les classes et ce qui va avec](#les-classes-et-ce-qui-va-avec)
-	- [Un objet](#un-objet)
-	- [Une classe](#une-classe)
-	- [Utiliser une classe](#utiliser-une-classe)
+  - [Un objet](#un-objet)
+  - [Une classe](#une-classe)
+  - [Utiliser une classe](#utiliser-une-classe)
 - [Le PHPDoc](#le-phpdoc)
+
+## Origine
+
+## Particularités
+
+- langage interprété
+  - pas de compilateur
+  - le code est exécuté et traduit en langage machine en direct
+    - pas le plus performant de base
+    - pas le plus sûr de base
+      - pour savoir si le code est correct, il faut l'exécuter, ce qui peut invibiliser certains bugs
+  - a besoin d'un serveur
+- langage impératif
+  - principe de la recette de cuisine et de l'algorithme traditionnel
+    - on indique directement à la machine quelles opérations faire
+  - facile à lire, à suivre
+
+## Installation
+
+- [WAMP](https://www.wampserver.com/#wampserver-64-bits-php-5-6-25-php-7)
+- [XAMPP](https://sourceforge.net/projects/xampp/files/XAMPP%20Mac%20OS%20X/8.2.4/xampp-osx-8.2.4-0-installer.dmg)
+- [LAMP](https://doc.ubuntu-fr.org/lamp)
+
+## Premiers pas
 
 ## La syntaxe de base
 
