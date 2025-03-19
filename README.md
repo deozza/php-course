@@ -14,6 +14,16 @@
 - [Les boucles](#les-boucles)
 - [Les conditions](#les-conditions)
 - [Les fonctions de base et utiles de PHP](#les-fonctions-de-base-et-utiles-de-php)
+- [Les différentes inputs](#les-différentes-inputs)
+  - [Depuis le terminal](#depuis-le-terminal)
+    - [Avec `$argv`](#avec-argv)
+    - [Avec `stdin`](#avec-stdin)
+  - [Depuis un fichier](#depuis-un-fichier)
+    - [Texte](#texte)
+    - [CSV](#csv)
+    - [JSON](#json)
+  - [Depuis l'URL](#depuis-lurl)
+  - [Depuis un formulaire](#depuis-un-formulaire)
 - [Les fonctions](#les-fonctions)
 - [Les classes et ce qui va avec](#les-classes-et-ce-qui-va-avec)
   - [Un objet](#un-objet)
@@ -625,6 +635,153 @@ Utile pour sécuriser l'application si un comportement anormal se produit.
 - \DateTime : pour manipuler des dates
 
 Dans le doute aller regarder <https://www.php.net/docs.php>
+
+## Les différentes inputs
+
+### Depuis le terminal
+
+- Pour indiquer que le fichier est exécutable uniquement avec PHP depuis le terminal
+- sur linux, le script devra contenir :
+
+```php
+#!/usr/bin/php
+```
+
+- il n'y aura pas de headers HTTP
+
+#### Avec `$argv`
+
+- aussi utilisable avec `$_SERVER['argv']`
+- utiliser `$argc` pour avoir le nombre d'arguments envoyés
+  - aussi utilisable avec `$_SERVER['argc']`
+- récupère dans un tableau tous les paramètres envoyés
+  - dont le nom du fichier exécuté
+
+Exemple :
+
+```php
+<?php
+var_dump($argv);
+?>
+```
+
+```bash
+php script.php arg1 arg2 arg3
+```
+
+```bash
+array(4) {
+  [0]=>
+  string(10) "script.php"
+  [1]=>
+  string(4) "arg1"
+  [2]=>
+  string(4) "arg2"
+  [3]=>
+  string(4) "arg3"
+}
+```
+
+
+
+#### Avec `stdin`
+
+- ouvre un stream d'écoute
+
+Exemple :
+
+```php
+<?php
+echo "Are you sure you want to do this?  Type 'yes' to continue: ";
+$handle = fopen ("php://stdin","r");
+$line = fgets($handle);
+if(trim($line) != 'yes'){
+    echo "ABORTING!\n";
+    exit;
+}
+echo "\n";
+echo "Thank you, continuing...\n";
+?>
+```
+
+### Depuis un fichier
+
+#### Texte
+
+
+#### CSV
+
+- tableur formaté, lisible par un humain, léger
+- `fopen` pour ouvrir un pointeur fichier
+- dans une boucle `while`, utiliser `fgetcsv` pour récupérer le contenu du fichier ligne par ligne
+  - la ligne récupérée est au format tableau
+- `fclose` pour fermer le pointeur fichier une fois l'opération terminée
+
+Exemple :
+
+```php
+$handle = fopen(__DIR__ . '/input.csv', 'r');
+$row = fgetcsv($handle, 1000, ',', '"', '\\');
+$input = [];
+while($row !== false) {
+    $input[] = $row;
+    $row = fgetcsv($handle, 1000, ',', '"', '\\');
+}
+fclose($handle);
+```
+
+#### JSON
+
+- une fois l'input récupéré
+  - via `file_get_content()` par exemple
+- utiliser `json_decode()` pour formater les données en objet ou tableau
+- utiliser `json_encode()` pour formater une variable *castable* en string vers du json
+
+### Depuis l'URL
+
+- utilisation des `query_params` :
+  - défini dans une uri après le caractère `?`
+  - dans une urli `/user?id=1`
+    - `id` est une variable dont la valeur est `1`
+  - on peut avoir plusieurs query params dans une même uri
+    - elles sont séparées par `&`
+- récupérable dans le code avec `$_GET` sous la forme d'un tableau
+- toutes les valeurs sont en string
+
+### Depuis un formulaire
+
+```php
+<?php
+
+var_dump($_POST);
+
+?>
+    <form action="" method="POST" class="flex flex-col items-center justify-between space-y-8 border border-stone-300 rounded-xl w-8/12 p-6">
+        <h1 class="text-6xl">Register</h1>
+        <ul class="w-full flex flex-col items-center justify-center space-y-4">
+            <li class="w-full flex flex-row items-center justify-between" >
+                <label for="email" class="flex-1">Email</label>
+                <input type="email" id="email" name="email" placeholder="Votre email" class="flex-2 border <?php if(empty($error) === false && $error['type'] === 'login-error'){ echo 'border-red-500';} else {echo 'border-white-500';}?>  p-2 rounded-xl" value="<? if($content !== null && $content['email'] !== null):  echo $content['email']; endif ?>" />
+            </li>
+        
+            <li class="w-full flex flex-row items-center justify-between" >
+                <label for="password" class="flex-1">Mot de passe</label>
+                <input type="password" id="password" name="password" placeholder="Mot de passe" class="flex-2 border <?php if(empty($error) === false && $error['type'] === 'login-error'){ echo 'border-red-500';} else {echo 'border-white-500';}?> p-2 rounded-xl" />
+            </li>
+
+            <?php if(empty($error) === false && $error['type'] === 'login-error'): ?>
+                <li>
+                    <p class="text-red-500"><?= $error['message']; ?></p>
+                </li>
+            <?php endif; ?>
+            
+            
+            <li class="flex flex-row items-center justify-center space-x-4" >
+                <button type="submit" class="border rounded-xl bg-green-500 border-green-500 px-4 py-2">Valider</button>
+            </li>
+        </ul>
+    </form>
+```
 
 ## Les fonctions
 
