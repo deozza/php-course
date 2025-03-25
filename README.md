@@ -18,8 +18,8 @@
   - [Depuis le terminal](#depuis-le-terminal)
     - [Avec `$argv`](#avec-argv)
     - [Avec `stdin`](#avec-stdin)
+    - [Avec `readline`](#avec-readline)
   - [Depuis un fichier](#depuis-un-fichier)
-    - [Texte](#texte)
     - [CSV](#csv)
     - [JSON](#json)
   - [Depuis l'URL](#depuis-lurl)
@@ -631,7 +631,8 @@ Utile pour sécuriser l'application si un comportement anormal se produit.
 - json_encode : pour serialiser une variable selon l'encodage JSON
 - json_decode : pour transformer un string au format JSON vers un tableau ou un objet
 - empty : pour vérifier si une variable correspond à `null`, `0`, `false` ou `''`
-- is_* : pour confirmer le type d'une variable
+- is_* : pour confirmer le type PHP d'une variable
+- ctype_* : pour vérifier le type de contenu d'une variable
 - \DateTime : pour manipuler des dates
 
 Dans le doute aller regarder <https://www.php.net/docs.php>
@@ -648,6 +649,8 @@ Dans le doute aller regarder <https://www.php.net/docs.php>
 ```
 
 - il n'y aura pas de headers HTTP
+- toutes les valeurs entrées sont typées `string`, peu importe les valeurs
+  - il est donc important de valider le contenu des valeurs envoyées avant de continuer l'algorithme
 
 #### Avec `$argv`
 
@@ -682,8 +685,6 @@ array(4) {
 }
 ```
 
-
-
 #### Avec `stdin`
 
 - ouvre un stream d'écoute
@@ -704,10 +705,64 @@ echo "Thank you, continuing...\n";
 ?>
 ```
 
+- lorsque l'input est validée dans le terminal en appuyant sur la touche `entrée`, cette touche est également enregistrée comme input
+- la valeur contiendra des espaces vides correspondant au retour à la ligne
+  - utiliser `trim()` pour supprimer ces espaces vides
+- pour permettre l'envoi de plusieurs valeurs, utiliser `explode()`
+
+```php
+<?php
+echo "Add fruits to the list \n ";
+$handle = fopen ("php://stdin","r");
+$input = trim(fgets($handle));
+
+$fruits = explode(' ', $input);
+
+var_dump($fruits);
+?>
+```
+
+```bash
+php script.php
+"Add fruits to the list"
+"apple orange banana"
+```
+
+```bash
+array(4) {
+  [0]=>
+  string(5) "apple"
+  [1]=>
+  string(6) "orange"
+  [2]=>
+  string(6) "banana"
+}
+```
+
+#### Avec `readline`
+
+- affiche un message dans la console, ouvre un stream d'écoute et stocke l'input utilisateur dans une variable
+- on peut en enchainer plusieurs
+
+Exemple :
+
+```php
+<?php
+$input = readline("Are you sure you want to do this?  Type 'yes' to continue: \n");
+if($input != 'yes'){
+    echo "ABORTING!\n";
+    exit;
+}
+
+echo "Thank you, continuing...\n";
+
+$name = readline("Who are you ? \n");
+echo "Hello $name \n";
+
+?>
+```
+
 ### Depuis un fichier
-
-#### Texte
-
 
 #### CSV
 
@@ -735,7 +790,16 @@ fclose($handle);
 - une fois l'input récupéré
   - via `file_get_content()` par exemple
 - utiliser `json_decode()` pour formater les données en objet ou tableau
+  - par défaut, un objet sera renvoyé
+  - pour récupérer un tableau, ajouter `true` comme second argument de la fonction
 - utiliser `json_encode()` pour formater une variable *castable* en string vers du json
+
+Exemple :
+
+```php
+$fileContent = file_get_content('input.json');
+$contentAsArray = json_decode($fileContent, true);
+```
 
 ### Depuis l'URL
 

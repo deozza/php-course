@@ -59,7 +59,7 @@ Exemple d'affichage :
 0 2 4 6 8 10 12 14 16 18 20
 0 3 6 9 12 15 18 21 24 27 30
 ```
- 
+
 ## Triangle
 
 Pour un nombre donné n, afficher sur le terminal un triangle équilatéral de taille n.
@@ -72,6 +72,7 @@ Exemple d'affichage :
 * * *
 * * * *
 ```
+
 ## Pyramide
 
 Modifier l'algorithme de l'exercice précédent pour afficher une pyramide.
@@ -91,4 +92,4 @@ Générer un tableau de 20 nombres aléatoires allant de 1 à 10. Supprimer les 
 
 ## Purger, avec des fonctions
 
-Modifier votre algorithme de l'exercice précédent pour pouvoir inclure la fonction php `array_flip()`.
+Modifier votre algorithme de l'exercice précédent pour pouvoir inclure la fonction php `array_flip()` et `array_keys()`.
