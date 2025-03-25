@@ -93,3 +93,21 @@ Générer un tableau de 20 nombres aléatoires allant de 1 à 10. Supprimer les 
 ## Purger, avec des fonctions
 
 Modifier votre algorithme de l'exercice précédent pour pouvoir inclure la fonction php `array_flip()` et `array_keys()`.
+
+## Inputs utilisateur
+
+Se baser sur l'algorithme précédent pour les prochains exercices. Laissez l'utilisateur déterminer :
+
+- la taille du tableau de nombres aléatoires
+- les bornes min et max des nombres aléatoires
+
+### Terminal
+
+- utiliser `$argv` pour récupérer les inputs
+- utiliser `stdin` pour récupérer les inputs
+- utiliser `readline` pour récupérer les inputs
+
+### Fichier
+
+- utiliser un fichier `.csv` pour stocker les inputs utilisateur
+- utiliser un fichier `.json` pour stocket les inputs utilisateur
