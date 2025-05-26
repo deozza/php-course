@@ -25,11 +25,12 @@
   - [Depuis l'URL](#depuis-lurl)
   - [Depuis un formulaire](#depuis-un-formulaire)
 - [Les fonctions](#les-fonctions)
-- [Les classes et ce qui va avec](#les-classes-et-ce-qui-va-avec)
-  - [Un objet](#un-objet)
-  - [Une classe](#une-classe)
-  - [Utiliser une classe](#utiliser-une-classe)
-- [Le PHPDoc](#le-phpdoc)
+- [Utilisation avec une base de données](#utilisation-avec-une-base-de-données)
+  - [Créer une connexion](#créer-une-connexion)
+  - [Requête SELECT](#requête-select)
+  - [Requête INSERT](#requête-insert)
+- [Séparation du code en plusieurs fichiers](#séparation-du-code-en-plusieurs-fichiers)
+- [Exemple d'étapes pour organiser un développement](#exemple-détapes-pour-organiser-un-développement)
 
 ## Origine
 
@@ -696,6 +697,8 @@ Exemple :
 echo "Are you sure you want to do this?  Type 'yes' to continue: ";
 $handle = fopen ("php://stdin","r");
 $line = fgets($handle);
+fclose($handle);
+
 if(trim($line) != 'yes'){
     echo "ABORTING!\n";
     exit;
@@ -715,6 +718,7 @@ echo "Thank you, continuing...\n";
 echo "Add fruits to the list \n ";
 $handle = fopen ("php://stdin","r");
 $input = trim(fgets($handle));
+fclose($handle);
 
 $fruits = explode(' ', $input);
 
@@ -775,6 +779,7 @@ echo "Hello $name \n";
 Exemple :
 
 ```php
+<?php
 $handle = fopen(__DIR__ . '/input.csv', 'r');
 $row = fgetcsv($handle, 1000, ',', '"', '\\');
 $input = [];
@@ -797,6 +802,7 @@ fclose($handle);
 Exemple :
 
 ```php
+<?php
 $fileContent = file_get_content('input.json');
 $contentAsArray = json_decode($fileContent, true);
 ```
@@ -847,16 +853,35 @@ var_dump($_POST);
     </form>
 ```
 
+`$_POST` est une variable de PHP, qui est disponible dans tout le code et mise à jour par PHP. Elle contient un tableau `clef=>valeur`, avec comme clefs les valeurs dans l'option `name` des balises `input` et comme valeur ce que l'utilisateur a rentré dans le formulaire.
+
 ## Les fonctions
 
 Une fonction est un morceau de code pouvant être réutilisé plusieurs fois, à plusieurs endroits, dans une application.
 
 Elle est définie par un nom, une liste d'arguments. Elle peut retourner un résultat ou ne rien retourner.
 
+Format :
+
+```
+public function nomDeLaFonction(type $argument): type {
+
+}
+```
+
+Le nom de la fonction doit être suffisamment explicite pour que n'importe qui puisse comprendre son but. On ne doit pas être obligé de lire le contenu de la fonction pour savoir comment l'utiliser. C'est le même raisonnement que pour les noms de variable.
+
+Typer les arguments et le retour d'une fonction permet 2 choses :
+
+- sécuriser son code
+  - ne pas laisser passer n'importe quel genre de variable dans la fonction, ce qui pourrait introduire des effets indésirés voir des bugs
+- améliorer la lecture et la compréhension du code
+  - en connaissant les types d'arguments et de retour, on sait quels genres d'inputs on doit fournir et comment ils vont être manipulés pour générer l'output
+
+Exemple :
+
 ```php
 <?php
-
-
  $listOfNumbers = initListOfNumbers(10);
  $result = getFooBarBuzzResult($listOfNumbers);
 
@@ -913,109 +938,105 @@ Elle est définie par un nom, une liste d'arguments. Elle peut retourner un rés
  ?>
 ```
 
-## Les classes et ce qui va avec
+## Utilisation avec une base de données
 
-### Un objet
-
-Un objet est un type de variable. On l'a déjà vu avec `new \DateTime` précédemment pour la manipulation de date.
-
-Il est composé de propriétés, qui vont stocker des valeurs, et des méthodes, qui vont manipuler des données.
-
-Créer simplement un objet :
+### Créer une connexion
 
 ```php
 <?php
 
- $user = new \stdClass();
- $user->name = 'John Doe';
- $user->age = 21;
+$host = 'urlVersServeur'; // localhost ou 127.0.0.1 par exemple
+$dbname = 'nomDeLaBaseDeDonnées';
+$user = 'nomUtilisateur';
+$password = 'motDePasseUtilisateur';
+$dsn = "mysql:host=$host;dbname=$dbname;charset-UTF8";
 
- echo $user->age;
+$dbConnexion = new PDO($dsn, $user, $password);
 
- $user->age = 35;
-
- echo $user->age;
-
- var_dump($user);
-
- ?>
+?>
 ```
 
-On va souvent utiliser un objet pour représenter un concept. On va grouper des valeurs et des fonctionnalités qui ont un rapport avec ce concept, pour pouvoir les gérer ensemble, mieux se les représenter, ...
-
-### Une classe
+### Requête SELECT
 
 ```php
 <?php
 
- class User{
-  private $name;
-  private $age;
+$sql = 'SELECT * FROM users WHERE username = :username AND email = :email;';
+$statement = $dbConnexion->prepare($sql);
+$statement->execute([
+  'username' => 'test',
+  'email' => 'test@gmail.com'
+]);
 
-  public function __construct(int $age){
-   $this->age = $age;
-  }
-
-  public function getAge(): int {
-   return $this->age;
-  }
-
-  public function setAge(int $age): self {
-   $this->age = $age;
-   return $this;
-  }
-
-  
-  public function getName(): string {
-   return $this->name;
-  }
-
-  public function setName(string $name): self {
-   $this->name = $name;
-   return $this;
-  }
-
-  public function isUnderAge(): bool {
-   return $this->age < 21;
-  }
-
-  public function happyBirthday(): string {
-   $this->age++;
-
-   return "Happy birthday " . $this->name . ", you are now " . $this->age . " years old.";
-  } 
- }
- ?>
+$users = $statement->fetch(PDO::FETCH_ASSOC);
+?>
 ```
 
-### Utiliser une classe
-
-## Le PHPDoc
-
-Un commentaire écrit dans un format particulier qui peut aider les développeurs et est utilisé par des outils tiers.
-
-Par les IDE, pour donner des informations supplémentaires sur les variables, les fonctions, les classes. Pour aussi faire de l'analyse statique et repérer d'éventuels bugs
-Par des outils comme APIDOC, swagger, ... pour générer automatiquement de la documentation
-
-Originellement utilisé également pour *typer* l'application. Aujourd'hui avec le typage de 8.1, phpdoc permet d'étendre les définitions des types
+### Requête INSERT
 
 ```php
 <?php
 
- /**
- * @access public
- * 
- * @param string $name
- * @return string
- * 
- * @throw \Exception
- */
- public function welcomeUser(string $name) : string {
-  if(strlen($name) === 0) {
-   throw new \Exception('Name should not be empty');
-  }
+$sql = 'INSERT INTO users (username, email) VALUES(:username, :email);';
+$statement = $dbConnexion->prepare($sql);
+$statement->execute([
+  'username' => 'test',
+  'email' => 'test@gmail.com'
+]);
 
-  return 'Welcome '.$name;
- }
- ?>
+?>
 ```
+
+## Séparation du code en plusieurs fichiers
+
+- pourquoi : améliorer la lisibilité, donc la compréhension du code
+  - exemple :
+    - je cherche les fonctionnalités liées au requête en BDD sur la table `user`, je vais dans le fichier `/lib/repository/user.php`
+    - je cherche les fonctionnalités liées à la connexion en BDD, je vais dans le fichier `/lib/db/connexion.php`
+    - je cherche la fonctionnalité de création d'un article de blog, je vais dans le fichier `/lib/modele/blog.php`
+- processus : regrouper les familles de fonctionnalités dans un ficher dédié
+  - exemple :
+    - se demander avec quelle interface interragit la fonction (terminal, base de données, html, fichier, ...)
+    - se demander quel type de ressource la fonction manipule (user, blog, contact, ...)
+
+Pour pouvoir faire appel aux fonctions d'un fichier B dans un fichier A, utiliser `require_once` dans le fichier A :
+
+```php
+//B.php
+
+<?php
+
+public function bar($argument) {
+
+}
+
+?>
+
+
+//A.php
+
+<?php
+
+require_once 'B.php'
+
+public function foo() {
+
+}
+
+$value1 = foo();
+$value2 = bar($value1);
+
+?>
+
+## Exemple d'étapes pour organiser un développement
+
+1. créer un fichier PHP
+2. dans un commentaire, découper en liste de tâches l'objectif demandé
+3. écrire l'algorithme correspondant à chaque tâche (= solution naïve)
+   - tester l'application à chaque algorithme
+4. une fois que le script obtenu répond au besoin, commencer à le découper en fonctions
+   1. d'abord 1 fonction === 1 tâche
+   2. tester
+   3. puis 1 fonction === 1 fonctionnalité
+   4. tester
+5. répartir les fonctions obtenues dans différents fichiers, selon les domaines applicatifs et les familles de responsabilité des fonctions
