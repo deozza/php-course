@@ -5,7 +5,7 @@
 - [Introduction](./01-introduction) 
 - [Installation](./02-installation) 
 - [Syntaxe](./03-syntax) 
-- [Intéragir avec le terminal](./04-execution-in-terminal) 
+- [Exécution depuis le terminal](./04-execution-in-terminal) 
 - [Les variables](./05-variables) 
 - [Opérations](./06-operations) 
 - [Conditions](./07-conditions) 
