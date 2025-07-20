@@ -1,3 +1,3 @@
 # Exercice 35
 
-Reprendre le jeu de l'exercice 34. Lorsque la touche `r` est appuyée, revenir dans le temps d'un déplacement.
+Reprendre le jeu de l'exercice 33. Créer un fichier d'historique des positions. À chaque fois que le personnage bouge d'une case, inscrire la nouvelle position dans le fichier d'historique.
