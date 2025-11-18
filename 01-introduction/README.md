@@ -32,6 +32,7 @@
   - création de Personal Home Page Tools (PHP Tools)
     - un langage qui s'exécute aussi sur httpd
     - qui s'intégre dans une page HTML
+    - langage interprété et impératif
 - ajout de fonctionnalités
   - connexion à une base de données
   - gestion des formulaires
@@ -55,55 +56,6 @@ Sources :
 
 - [wikipedia](https://fr.wikipedia.org/wiki/PHP)
 - [php.net](https://www.php.net/manual/fr/history.php.php)
-
-## Langage impératif
-
-**Définition :**
-
-- un programme qui se base sur une série d'étapes à suivre (control flow) dans l'ordre pour modifier l'état de la machine et arriver au résultat final
-- ne manipule pas le résultat final
-- modifier l'état de la machine = état mutable
-- utilise des boucles, des conditions, des déclarations d'input et d'output
-
-**Avantages :**
-
-- control flow
-  - facile à lire et comprendre
-  - contrôle total de l'ordre des étapes
-  - machines adaptées pour exécuter ce genre de programme
-
-**Inconvénients :**
-
-- control flow
-  - peut devenir complexe et difficile à maintenir
-- mutabilité
-  - le changement de valeurs des variables peut devenir difficile à suivre et retenir
-
-Sources :
-
-- [geeksforgeeks](https://www.geeksforgeeks.org/what-is-imperative-programming/)
-
-## Langage interprété
-
-**Définition :**
-
-- l'exécution du programme, et sa traduction vers un langage plus proche de la machine, se fait en direct
-- il n'est pas exécuté directement par la machine, mais par un autre logiciel intermédiaire
-
-**Avantages :**
-
-- langage généralement plus abstrait (= éloigné de la machine)
-  - donc plus simple à apprendre, comprendre et maîtriser
-- plus facile et rapide à mettre à jour
-
-**Inconvéients :**
-
-- moins performant
-- les bugs apparaissent uniquement lorsque la ligne de code qui les contient est exécutée
-
-Sources :
-
-- [geeksforgeeks](https://www.geeksforgeeks.org/difference-between-compiled-and-interpreted-language/)
 
 ## Quelles utilisations ?
 
