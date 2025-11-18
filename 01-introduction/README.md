@@ -2,10 +2,12 @@
 
 ## Sommaire
 
-- [Origine du langage](#origine-du-langage)
-- [Langage impératif](#langage-impératif)
-- [Langage interprété](#langage-interprété)
-- [Quelles utilisations](#quelles-utilisations)
+<!--toc:start-->
+- [Introduction](#introduction)
+  - [Sommaire](#sommaire)
+  - [Origine du langage](#origine-du-langage)
+  - [Quelles utilisations ?](#quelles-utilisations)
+<!--toc:end-->
 
 ## Origine du langage
 
